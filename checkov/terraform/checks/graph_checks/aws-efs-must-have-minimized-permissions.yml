@@ -8,13 +8,39 @@ scope:
   provider: "aws"
 definition:
   and:
+    - cond_type: "filter"
+      attribute: "resource_type"
+      operator: "within"
+      value: 
+        - "aws_efs_file_system_policy"
+    - cond_type: "connection"
+      resource_types:
+        - "aws_efs_file_system_policy"
+      connected_resource_types:
+        - "data.aws_iam_policy_document"
+      operator: "exists"
+    - or:
+      - cond_type: "attribute"
+        resource_types:
+          - "data.aws_iam_policy_document"
+        attribute: "statement.*.principals.type"
+        operator: "not_exists"
+      - and:
+        - cond_type: "attribute"
+          resource_types:
+          - "data.aws_iam_policy_document"
+          attribute: "statement.*.principals.type"
+          operator: "equals"
+          value: "AWS"
+        - cond_type: "attribute"
+          resource_types:
+          - "data.aws_iam_policy_document"
+          attribute: "statement.*.principals.identifiers"
+          operator: "not_contains"
+          value: "*"
+    
     # - cond_type: "attribute"
     #   resource_types:
     #   - "aws_efs_file_system_policy"
-    #   attribute: "policy.Statement[?(@.Principal.AWS == '*')]]"
+    #   attribute: "policy.Statement[?(@.Effect == Allow)].Condition.Bool['elasticfilesystem:AccessedViaMountTarget']"
     #   operator: "jsonpath_not_exists"
-    - cond_type: "attribute"
-      resource_types:
-      - "aws_efs_file_system_policy"
-      attribute: "policy.Statement[?(@.Effect == Allow)].Condition.Bool['elasticfilesystem:AccessedViaMountTarget']"
-      operator: "jsonpath_not_exists"
