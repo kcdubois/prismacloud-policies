@@ -1,0 +1,20 @@
+---
+metadata:
+  id: "CKV2_AWS_1001"
+  name: "AWS EFS must have minimized permissions"
+  guidelines: "AWS EFS must have minimized permissions"
+  category: "storage"
+scope:
+  provider: "aws"
+definition:
+  and:
+    # - cond_type: "attribute"
+    #   resource_types:
+    #   - "aws_efs_file_system_policy"
+    #   attribute: "policy.Statement[?(@.Principal.AWS == '*')]]"
+    #   operator: "jsonpath_not_exists"
+    - cond_type: "attribute"
+      resource_types:
+      - "aws_efs_file_system_policy"
+      attribute: "policy.Statement[?(@.Effect == Allow)].Condition.Bool['elasticfilesystem:AccessedViaMountTarget']"
+      operator: "jsonpath_not_exists"

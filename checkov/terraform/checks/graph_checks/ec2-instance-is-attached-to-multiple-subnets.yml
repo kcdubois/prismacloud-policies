@@ -1,0 +1,45 @@
+---
+metadata:
+  id: "CKV2_AWS_1002"
+  name: "EC2 instance must not be connected to multiple subnets"
+  guidelines: "Remove any additional network interface attached to EC2 instances."
+  category: "networking"
+  severity: "medium"
+scope:
+  provider: "aws"
+definition:
+  and:
+    - cond_type: "filter"
+      value:
+        - "aws_instance"
+      attribute: "resource_type"
+      operator: "within"
+    - or:
+      - cond_type: "attribute"
+        resource_types:
+          - "aws_instance"
+        attribute: "network_interface.device_index"
+        operator: "equals"
+        value: "0"
+      - and:
+        - cond_type: "connection"
+          resource_types:
+            - "aws_instance"
+          connected_resource_types:
+            - "aws_network_interface"
+            - "aws_network_interface_attachment"
+          operator: "exists"
+        - cond_type: "attribute"
+          resource_types: 
+            - "aws_network_interface"
+          attribute: "attachment.device_index"
+          operator: "equals"
+          value: "0"
+        - cond_type: "attribute"
+          resource_types: 
+            - "aws_network_interface_attachment"
+          attribute: "device_index"
+          operator: "equals"
+          value: "0"
+
+          

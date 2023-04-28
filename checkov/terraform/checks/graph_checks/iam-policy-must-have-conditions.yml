@@ -1,0 +1,42 @@
+---
+metadata:
+  id: "CKV2_AWS_1003"
+  name: "IAM resources must have conditions applied"
+  guidelines: "IAM resources must have either aws:SourceVPC or aws:SourceIP"
+  category: "iam"
+scope:
+  provider: "aws"
+definition:
+  or:
+    - cond_type: "attribute"
+      resource_types:
+      - "aws_iam_policy"
+      - "aws_iam_role_policy"
+      - "aws_iam_group_policy"
+      - "aws_iam_user_policy"
+      attribute: "policy.Statement[?(@.Effect == Allow)].Condition.StringEquals['aws:SourceVpc']"
+      operator: "jsonpath_exists"
+    - cond_type: "attribute"
+      resource_types:
+      - "aws_iam_policy"
+      - "aws_iam_role_policy"
+      - "aws_iam_group_policy"
+      - "aws_iam_user_policy"
+      attribute: "policy.Statement[?(@.Effect == Allow)].Condition.IpAddress['aws:SourceIp']"
+      operator: "jsonpath_exists"
+    - cond_type: "attribute"
+      resource_types:
+      - "aws_iam_policy"
+      - "aws_iam_role_policy"
+      - "aws_iam_group_policy"
+      - "aws_iam_user_policy"
+      attribute: "policy.Statement[?(@.Effect == Allow)].Condition.StringEquals['aws:SourceVpce']"
+      operator: "jsonpath_exists"
+    - cond_type: "attribute"
+      resource_types:
+      - "aws_iam_policy"
+      - "aws_iam_role_policy"
+      - "aws_iam_group_policy"
+      - "aws_iam_user_policy"
+      attribute: "policy.Statement[?(@.Effect == Allow)].Condition.StringEquals['inap:SourceIp']"
+      operator: "jsonpath_exists"
