@@ -1,0 +1,15 @@
+---
+metadata:
+  id: "CKV2_AWS_1007"
+  name: "AWS Redshift cluster must be deployed in a VPC"
+  guidelines: "AWS Redshift cluster is deployed in VPC"
+  category: "networking"
+scope:
+  provider: "aws"
+definition:
+  conf_type: "attribute"
+  resource_types:
+    - "aws_redshift_cluster"
+  attribute: "enhanced_vpc_routing"
+  operator: "equals"
+  value: "true"

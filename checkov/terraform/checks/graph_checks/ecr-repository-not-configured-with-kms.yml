@@ -1,0 +1,21 @@
+---
+metadata:
+  id: "CKV2_AWS_1012"
+  name: "AWS ECR repository must have encryption configured with KMS"
+  guidelines: "Change default encryption to KMS with a CMK"
+  category: "general"
+scope:
+  provider: "aws"
+definition:
+  and:
+    - cond_type: "attribute"
+      resource_types:
+        - "aws_ecr_repository"
+      attribute: "encryption_configuration.encryption_type"
+      operator: "equals"
+      value: "KMS"
+    - cond_type: "attribute"
+      resource_types:
+        - "aws_ecr_repository"
+      attribute: "encryption_configuration.kms_key"
+      operator: "exists"

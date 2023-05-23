@@ -1,0 +1,21 @@
+---
+metadata:
+  id: "CKV2_AWS_1006"
+  name: "AWS RDS DB snapshot must not be shared with other accounts"
+  guidelines: "AWS RDS DB snapshot must not be shared with other accounts"
+  category: "iam"
+scope:
+  provider: "aws"
+definition:
+  and:
+    - cond_type: "attribute"
+      resource_types:
+        - "aws_db_snapshot"
+      attribute: "shared_accounts"
+      operator: "not_contains"
+      value: "all"
+    - cond_type: "attribute"
+      resource_types:
+        - "aws_db_snapshot"
+      attribute: "shared_accounts"
+      operator: "is_empty"
