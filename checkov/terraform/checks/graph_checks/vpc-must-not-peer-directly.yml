@@ -1,0 +1,23 @@
+---
+metadata:
+  id: "CKV2_AWS_1010"
+  name: "VPCs must not peer directly"
+  guidelines: "Use a transit gateway for inter-VPC communication"
+  category: "networking"
+  severity: "medium"
+scope:
+  provider: "aws"
+definition:
+  and:
+    - cond_type: "filter"
+      attribute: "resource_type"
+      value: 
+        - "aws_vpc_peering_connection"
+      operator: "within"
+    - cond_type: "connection"
+      resource_types:
+        - "aws_vpc_peering_connection"
+      connected_resource_types:
+        - "aws_vpc"
+      operator: "not_exists"
+          
