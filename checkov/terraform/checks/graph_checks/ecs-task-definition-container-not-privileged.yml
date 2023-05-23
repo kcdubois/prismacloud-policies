@@ -1,0 +1,21 @@
+---
+metadata:
+  id: "CKV2_AWS_1011"
+  name: "AWS ECS task definition must not have a container with privileged flag"
+  guidelines: "Disable the privileged flag in the task definition"
+  category: "general"
+scope:
+  provider: "aws"
+definition:
+  or:
+    - cond_type: "attribute"
+      resource_types:
+        - "aws_ecs_task_definition"
+      attribute: "container_definitions.[*].privileged"
+      operator: "jsonpath_not_exists"
+    - cond_type: "attribute"
+      resource_types:
+        - "aws_ecs_task_definition"
+      attribute: "container_definitions.[*].privileged"
+      operator: "jsonpath_equals"
+      value: "false"
